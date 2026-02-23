@@ -7,14 +7,6 @@ WORKDIR /app
 COPY package.json package-lock.json* yarn.lock* pnpm-lock.yaml* ./
 RUN npm ci
 
-# Build-time env vars
-ARG VITE_API_URL
-ARG VITE_YOUTUBE_API_TOKEN
-
-# Make them available to Vite during the build step
-ENV VITE_API_URL=$VITE_API_URL
-ENV VITE_YOUTUBE_API_TOKEN=$VITE_YOUTUBE_API_TOKEN
-
 # Build the app
 COPY . .
 RUN npm run build

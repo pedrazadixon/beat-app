@@ -1,0 +1,11 @@
+services:
+  beat-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        VITE_API_URL: ${VITE_API_URL}
+        VITE_YOUTUBE_API_TOKEN: ${VITE_YOUTUBE_API_TOKEN}
+    ports:
+      - "80:80"
+    restart: unless-stopped
