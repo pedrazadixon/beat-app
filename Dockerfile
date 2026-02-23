@@ -5,7 +5,7 @@ WORKDIR /app
 
 # Install dependencies
 COPY package.json package-lock.json* yarn.lock* pnpm-lock.yaml* ./
-RUN npm ci --omit=dev
+RUN npm ci
 
 # Build-time env vars
 ARG VITE_API_URL
