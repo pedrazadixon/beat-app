@@ -1,0 +1,119 @@
+.track-index {
+  justify-self: end;
+}
+
+.track-duration {
+  justify-self: end;
+}
+
+.track-list-header {
+  font-weight: bold;
+  top: 0;
+  left: 0;
+  position: sticky;
+  background-color: white;
+  z-index: 5;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.track-row:not(.track-list-header):hover {
+  backdrop-filter: invert(4%);
+}
+
+.album-grid .album-item {
+  cursor: default;
+  text-decoration: none;
+  transition: transform 150ms ease-in-out;
+}
+
+.album-grid .album-item:hover {
+  transform: scale(1.03);
+  cursor: pointer;
+}
+
+.artist-grid .artist-item {
+  cursor: default;
+  text-decoration: none;
+  transition: transform 150ms ease-in-out;
+  box-shadow: none;
+}
+
+.artist-grid .artist-item:hover {
+  transform: scale(1.04);
+  cursor: pointer;
+}
+
+.player-container {
+  box-shadow: 0px -2px 5px 0px rgba(0, 0, 0, 0.1);
+  padding-top: 5px;
+  padding-bottom: 5px;
+
+  .player-bar {
+    padding-inline: 16px;
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    justify-content: space-between;
+
+    .track-info {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+
+      p {
+        margin: 0;
+      }
+    }
+
+    .buttons-and-progress {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0px;
+      flex-grow: 1;
+      max-width: 700px;
+
+      .progress-and-time {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+
+        /* input[type="range"] {
+          -webkit-appearance: none;
+          appearance: none;
+          background: transparent;
+
+          &::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 11px;
+            height: 11px;
+            background: var(--mui-palette-primary-main);
+            cursor: pointer;
+            border-radius: 50%;
+            margin-top: -3px;
+          }
+
+          &::-webkit-slider-thumb:hover {
+            scale: 1.3;
+          }
+
+          &::-webkit-slider-runnable-track {
+            background: #053a5f;
+            height: 5px;
+            border-radius: 4px;
+          }
+        } */
+      }
+    }
+
+    .volume-and-others {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+  }
+}
+.hover-underline:hover { text-decoration: underline !important; }
