@@ -10,6 +10,25 @@ const getAudioUrl = async (trackId) => {
   return `${PROXY_URL}${streamUrl}`;
 };
 
+const updateMediaSessionMetadata = (track) => {
+  if ("mediaSession" in navigator) {
+    navigator.mediaSession.metadata = new MediaMetadata({
+      title: track.title,
+      artist: track.artists?.[0]?.name || "",
+      album: track.album?.name || "",
+      artwork: track.thumbnailUrl
+        ? [
+            {
+              src: `${PROXY_URL}${track.thumbnailUrl}`,
+              sizes: "512x512",
+              type: "image/jpeg",
+            },
+          ]
+        : [],
+    });
+  }
+};
+
 // Inicializamos el estado del reproductor
 const initialState = {
   isPlaying: false,
@@ -52,6 +71,8 @@ export const playerActions = {
       (t) => t.trackId === track.trackId
     );
 
+    updateMediaSessionMetadata(track);
+
     if (trackIndex !== -1) {
       playerStore.setKey("currentTrackIndex", trackIndex);
       const audioUrl = await getAudioUrl(track.trackId);
@@ -74,6 +95,8 @@ export const playerActions = {
       playerStore.setKey("currentTrackIndex", nextIndex);
       playerStore.setKey("currentTrack", nextTrack);
       playerStore.setKey("isLoading", true);
+      audioEl.pause();
+      updateMediaSessionMetadata(nextTrack);
       const audioUrl = await getAudioUrl(nextTrack.trackId);
       audioEl.src = audioUrl;
       audioEl.play();
@@ -90,6 +113,8 @@ export const playerActions = {
       playerStore.setKey("currentTrackIndex", prevIndex);
       playerStore.setKey("currentTrack", prevTrack);
       playerStore.setKey("isLoading", true);
+      audioEl.pause();
+      updateMediaSessionMetadata(prevTrack);
       const audioUrl = await getAudioUrl(prevTrack.trackId);
       audioEl.src = audioUrl;
       audioEl.play();
@@ -121,6 +146,13 @@ export const playerActions = {
     if (!isNaN(time) && isFinite(time)) {
       audioEl.currentTime = time;
       playerStore.setKey("currentTime", time);
+      if ("mediaSession" in navigator && !isNaN(audioEl.duration) && audioEl.duration !== Infinity) {
+        navigator.mediaSession.setPositionState({
+          duration: audioEl.duration,
+          playbackRate: audioEl.playbackRate,
+          position: audioEl.currentTime,
+        });
+      }
     }
   },
 };
@@ -133,6 +165,9 @@ onMount(playerStore, () => {
 
   audioEl.onplay = () => {
     playerStore.setKey("isPlaying", true);
+    if ("mediaSession" in navigator) {
+      navigator.mediaSession.playbackState = "playing";
+    }
   };
 
   audioEl.onplaying = () => {
@@ -150,13 +185,37 @@ onMount(playerStore, () => {
 
   audioEl.onpause = () => {
     playerStore.setKey("isPlaying", false);
+    if ("mediaSession" in navigator) {
+      navigator.mediaSession.playbackState = "paused";
+    }
   };
 
   audioEl.onloadedmetadata = () => {
     playerStore.setKey("duration", audioEl.duration);
+    if ("mediaSession" in navigator && !isNaN(audioEl.duration) && audioEl.duration !== Infinity) {
+      navigator.mediaSession.setPositionState({
+        duration: audioEl.duration,
+        playbackRate: audioEl.playbackRate,
+        position: audioEl.currentTime,
+      });
+    }
   };
 
   audioEl.ontimeupdate = () => {
     playerStore.setKey("currentTime", audioEl.currentTime);
   };
+
+  if ("mediaSession" in navigator) {
+    navigator.mediaSession.setActionHandler("play", () => playerActions.togglePause());
+    navigator.mediaSession.setActionHandler("pause", () => playerActions.togglePause());
+    navigator.mediaSession.setActionHandler("previoustrack", () => playerActions.playPrevious());
+    navigator.mediaSession.setActionHandler("nexttrack", () => playerActions.playNext());
+    navigator.mediaSession.setActionHandler("seekto", (details) => {
+      if (details.fastSeek && "fastSeek" in audioEl) {
+        audioEl.fastSeek(details.seekTime);
+        return;
+      }
+      playerActions.seekTo(details.seekTime);
+    });
+  }
 });
