@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import IconButton from "@mui/material/IconButton";
 import InputBase from "@mui/material/InputBase";
 import Paper from "@mui/material/Paper";
@@ -10,6 +10,7 @@ export default function SearchInput() {
   const [search, setSearch] = useState("");
   const location = useLocation();
   const navigate = useNavigate();
+  const debounceRef = useRef(null);
 
   useEffect(() => {
     const match = location.pathname.match(/^\/search\/([^/]+)/);
@@ -18,11 +19,25 @@ export default function SearchInput() {
     }
   }, [location.pathname]);
 
-  const handleSearch = (e) => {
-    e.preventDefault();
-    if (search.trim()) {
-      navigate(`/search/${search.trim()}`);
+  useEffect(() => {
+    return () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+    };
+  }, []);
+
+  const handleChange = (e) => {
+    const value = e.target.value;
+    setSearch(value);
+
+    if (debounceRef.current) {
+      clearTimeout(debounceRef.current);
     }
+
+    debounceRef.current = setTimeout(() => {
+      if (value.trim()) {
+        navigate(`/search/${value.trim()}`);
+      }
+    }, 500);
   };
 
   return (
@@ -34,18 +49,18 @@ export default function SearchInput() {
         alignItems: "center",
         width: "100%",
       }}
-      onSubmit={(e) => handleSearch(e)}
+      onSubmit={(e) => e.preventDefault()}
     >
+      <IconButton type="button" sx={{ p: "10px" }} aria-label="search" disabled>
+        <SearchIcon />
+      </IconButton>
       <InputBase
         type="search"
         value={search}
-        onChange={(e) => setSearch(e.target.value)}
+        onChange={handleChange}
         sx={{ ml: 1, flex: 1 }}
         placeholder="Tracks, albums, artists..."
       />
-      <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
-        <SearchIcon />
-      </IconButton>
     </Paper>
   );
 }
