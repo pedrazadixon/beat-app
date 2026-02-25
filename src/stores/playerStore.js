@@ -71,6 +71,7 @@ export const playerActions = {
       (t) => t.trackId === track.trackId
     );
 
+    audioEl.pause();
     updateMediaSessionMetadata(track);
 
     if (trackIndex !== -1) {

@@ -79,33 +79,6 @@
         align-items: center;
         justify-content: space-between;
         width: 100%;
-
-        /* input[type="range"] {
-          -webkit-appearance: none;
-          appearance: none;
-          background: transparent;
-
-          &::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 11px;
-            height: 11px;
-            background: var(--mui-palette-primary-main);
-            cursor: pointer;
-            border-radius: 50%;
-            margin-top: -3px;
-          }
-
-          &::-webkit-slider-thumb:hover {
-            scale: 1.3;
-          }
-
-          &::-webkit-slider-runnable-track {
-            background: #053a5f;
-            height: 5px;
-            border-radius: 4px;
-          }
-        } */
       }
     }
 
@@ -116,4 +89,7 @@
     }
   }
 }
-.hover-underline:hover { text-decoration: underline !important; }
+
+.hover-underline:hover {
+  text-decoration: underline !important;
+}
