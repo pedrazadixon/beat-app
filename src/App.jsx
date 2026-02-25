@@ -1,5 +1,9 @@
 import { Outlet } from "react-router-dom";
 import Box from "@mui/material/Box";
+import IconButton from "@mui/material/IconButton";
+import LightModeIcon from "@mui/icons-material/LightMode";
+import DarkModeIcon from "@mui/icons-material/DarkMode";
+import { useColorScheme } from "@mui/material/styles";
 import Player from "./components/Player";
 import { useStore } from "@nanostores/react";
 import { playerStore, playerActions } from "./stores/playerStore.js";
@@ -8,13 +12,19 @@ import SearchInput from "./components/SearchInput";
 
 function App() {
   const { isQueueOpen, queue, currentTrackIndex, queueDrawerWidth } = useStore(playerStore);
+  const { mode, setMode, systemMode } = useColorScheme();
+  
+  const isDarkMode = mode === 'dark' || (mode === 'system' && systemMode === 'dark');
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", height: "100vh", overflow: "hidden" }}>
 
       {/* header */}
-      <Box id="global-header" component="header" sx={{ p: 2, flexShrink: 0 }}>
+      <Box id="global-header" component="header" sx={{ p: 2, flexShrink: 0, display: "flex", alignItems: "center", gap: 2 }}>
         <SearchInput />
+        <IconButton onClick={() => setMode(isDarkMode ? 'light' : 'dark')} color="inherit" sx={{ ml: "auto" }}>
+          {isDarkMode ? <LightModeIcon /> : <DarkModeIcon />}
+        </IconButton>
       </Box>
 
       {/* main content */}

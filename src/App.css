@@ -11,9 +11,7 @@
   top: 0;
   left: 0;
   position: sticky;
-  background-color: white;
   z-index: 5;
-  border-bottom: 1px solid #f0f0f0;
 }
 
 .track-row:not(.track-list-header):hover {
