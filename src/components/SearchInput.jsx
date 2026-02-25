@@ -7,22 +7,25 @@ import SearchIcon from "@mui/icons-material/Search";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 
-import { useParams, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export default function SearchInput() {
   const [search, setSearch] = useState("");
-  const { query } = useParams();
+  const location = useLocation();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (query) {
-      setSearch(query);
+    const match = location.pathname.match(/^\/search\/([^/]+)/);
+    if (match) {
+      setSearch(decodeURIComponent(match[1]));
     }
-  }, [query]);
+  }, [location.pathname]);
 
   const handleSearch = (e) => {
     e.preventDefault();
-    navigate(`/search/${search}`);
+    if (search.trim()) {
+      navigate(`/search/${search.trim()}`);
+    }
   };
 
   return (

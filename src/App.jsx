@@ -4,6 +4,7 @@ import Player from "./components/Player";
 import { useStore } from "@nanostores/react";
 import { playerStore, playerActions } from "./stores/playerStore.js";
 import { Drawer, List, ListItem, ListItemText, Typography } from "@mui/material";
+import SearchInput from "./components/SearchInput";
 
 function App() {
   const { isQueueOpen, queue, currentTrackIndex, queueDrawerWidth } = useStore(playerStore);
@@ -12,7 +13,10 @@ function App() {
     <Box sx={{ display: "flex", flexDirection: "column", height: "100vh" }}>
       <Box sx={{ flexGrow: 1 }}>
         <div style={{ flexGrow: 1, display: "flex" }}>
-          <main style={{ flexGrow: 1 }}>
+          <main style={{ flexGrow: 1, display: "flex", flexDirection: "column" }}>
+            <Box id="global-header" sx={{ p: 2 }}>
+              <SearchInput />
+            </Box>
             <Outlet />
           </main>
           <Drawer

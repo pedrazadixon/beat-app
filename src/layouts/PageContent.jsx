@@ -5,19 +5,24 @@ export default function PageContent({ children }) {
 
   useEffect(() => {
     const pageHeader = document.getElementById("page-header");
+    const globalHeader = document.getElementById("global-header");
     const playerContainer =
       document.getElementsByClassName("player-container")[0];
+
+    const getGlobalHeaderHeight = () => {
+      return globalHeader ? globalHeader.offsetHeight : 0;
+    };
 
     const headerResizeObserver = new ResizeObserver((entries) => {
       const entry = entries[0];
       const height = entry.contentRect.height;
       const paddingTop = parseInt(
-        entry.target.style.paddingTop.replace("px", "")
+        entry.target.style.paddingTop.replace("px", "") || "0"
       );
       const paddingBottom = parseInt(
-        entry.target.style.paddingBottom.replace("px", "")
+        entry.target.style.paddingBottom.replace("px", "") || "0"
       );
-      const totalHeight = height + paddingTop + paddingBottom;
+      const totalHeight = height + paddingTop + paddingBottom + getGlobalHeaderHeight();
       setMainStyle({
         height: `calc(100vh - ${playerContainer.offsetHeight}px - ${totalHeight}px)`,
         overflow: "auto",
@@ -28,7 +33,7 @@ export default function PageContent({ children }) {
       headerResizeObserver.observe(pageHeader);
     } else {
       setMainStyle({
-        height: `calc(100vh - ${playerContainer.offsetHeight}px)`,
+        height: `calc(100vh - ${playerContainer.offsetHeight}px - ${getGlobalHeaderHeight()}px)`,
         overflow: "auto",
       });
     }
