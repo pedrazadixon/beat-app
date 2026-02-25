@@ -1,9 +1,13 @@
 import { map, onMount } from "nanostores";
 import audioEl from "../audioEl";
-import { STREAM_API } from "../constants";
+import { STREAM_API, PROXY_URL } from "../constants";
 
 const getAudioUrl = async (trackId) => {
-  return `${STREAM_API}/play?videoId=${trackId}`;
+  const response = await fetch(`${STREAM_API}/extract?videoId=${trackId}`);
+  const data = await response.json();
+  const streamUrl = data.data.streamUrl;
+
+  return `${PROXY_URL}${streamUrl}`;
 };
 
 // Inicializamos el estado del reproductor
