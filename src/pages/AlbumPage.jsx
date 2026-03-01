@@ -54,7 +54,7 @@ export default function AlbumPage() {
                 sx={{
                   width: 220,
                   height: 220,
-                  borderRadius: 3,
+                  borderRadius: 2,
                   overflow: "hidden",
                   flexShrink: 0,
                   boxShadow: "0 8px 40px rgba(0,0,0,0.3)",

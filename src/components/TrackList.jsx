@@ -27,27 +27,37 @@ export default function TrackList({
       : "[index] 24px [title] minmax(120px, 4fr) [album] minmax(120px, 2fr) [duration] minmax(120px, 1fr)",
     gridGap: "10px",
     alignItems: "center",
-    // cursor: "pointer",
+    cursor: "pointer",
   };
 
   return (
-    <>
-      <div className="track-list-header" style={trackRowStyle}>
-        <div className="track-index">#</div>
-        <div className="track-title">Title</div>
-        {!hideAlbum && <div className="track-album">Album</div>}
-        <div className="track-duration">time</div>
-      </div>
+    <Box sx={{
+      bgcolor: "background.paper",
+      borderRadius: "12px",
+      marginBottom: "12px",
+      padding: "12px",
+    }}>
+      <Box className="track-list-header" sx={{
+        ...trackRowStyle,
+        color: "text.secondary",
+      }}>
+        <Box className="track-index">#</Box>
+        <Box className="track-title">Title</Box>
+        {!hideAlbum && <Box className="track-album">Album</Box>}
+        <Box className="track-duration">Duration</Box>
+      </Box>
 
-      <List sx={{ bgcolor: "background.paper" }}>
+      <List>
         {tracks.map((item, index) => (
           <ListItem
             className="track-row"
             key={index + "" + item.trackId}
-            style={trackRowStyle}
+            sx={trackRowStyle}
             onClick={() => playTrackItem(item)}
           >
-            <div className="track-index">
+            <Box className="track-index" sx={{
+              color: "text.secondary",
+            }}>
               {currentTrack?.trackId === item.trackId ? (
                 isLoading ? (
                   <CircularProgress size={16} color="inherit" />
@@ -59,7 +69,7 @@ export default function TrackList({
               ) : (
                 index + 1
               )}
-            </div>
+            </Box>
             <Box sx={{ display: "flex", alignItems: "center" }}>
               {!hideImage && (
                 <ListItemAvatar>
@@ -92,7 +102,10 @@ export default function TrackList({
             </Box>
 
             {!hideAlbum && (
-              <div className="track-album" title={item.album?.title}>
+              <Box className="track-album" title={item.album?.title} sx={{
+                color: "text.secondary",
+                fontSize: "0.9rem",
+              }}>
                 {item.album?.albumId ? (
                   <Link
                     to={`/album/${item.album.albumId}`}
@@ -105,13 +118,15 @@ export default function TrackList({
                 ) : (
                   item.album?.title
                 )}
-              </div>
+              </Box>
             )}
 
-            <div className="track-duration">{item.duration.label}</div>
+            <Box className="track-duration" sx={{
+              color: "text.secondary",
+            }}>{item.duration.label}</Box>
           </ListItem>
         ))}
       </List>
-    </>
+    </Box>
   );
 }
