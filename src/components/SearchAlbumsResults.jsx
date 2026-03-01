@@ -40,7 +40,7 @@ export default function SearchAlbumsResults({
   }, [query]);
 
   return (
-    <div style={{ paddingInline: 10 }}>
+    <div>
       {initLoading && (
         <Box sx={{ display: "flex", justifyContent: "center", m: 5 }}>
           <CircularProgress />

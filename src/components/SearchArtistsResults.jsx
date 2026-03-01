@@ -15,21 +15,6 @@ export default function SearchArtistsResults({
   const [initLoading, setInitLoading] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const artistGridStyle = {
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr)",
-    columnGap: 8,
-    rowGap: 6,
-    justifyItems: "center",
-    marginTop: 20,
-  };
-
-  if (onlyOneRow) {
-    artistGridStyle.gridTemplateRows = "auto";
-    artistGridStyle.gridAutoRows = 0;
-    artistGridStyle.gridRowGap = 0;
-  }
-
   async function fetchAlbums() {
     setInitLoading(true);
     setResults([]);
@@ -53,7 +38,7 @@ export default function SearchArtistsResults({
   }, [query]);
 
   return (
-    <div style={{ paddingInline: 10 }}>
+    <div className="artist-results-wrapper">
       {initLoading && (
         <Box sx={{ display: "flex", justifyContent: "center", m: 5 }}>
           <CircularProgress />
@@ -62,27 +47,40 @@ export default function SearchArtistsResults({
 
       {!initLoading && results.length === 0 && (
         <Box sx={{ display: "flex", justifyContent: "center", m: 5 }}>
-          <div>No results found</div>
+          <Typography variant="body1" sx={{ opacity: 0.6 }}>
+            No results found
+          </Typography>
         </Box>
       )}
 
-      <div style={artistGridStyle} className="artist-grid">
+      <div className={`artist-grid ${onlyOneRow ? "artist-grid--single-row" : ""}`}>
         {results.map((item, index) => (
           <Card
             key={index + item.artistId}
             component={Link}
             to={`/artist/${item.artistId}`}
             className="artist-item"
+            elevation={0}
           >
-            <CardMedia
-              sx={{ height: 150, width: 150, borderRadius: "50%" }}
-              image={`${PROXY_URL}${item.thumbnailUrl}`}
-            />
-            <CardContent>
-              <Typography variant="body1" component="div">
+            <div className="artist-avatar-wrapper">
+              <CardMedia
+                component="img"
+                className="artist-avatar"
+                image={`${PROXY_URL}${item.thumbnailUrl}`}
+                alt={item.name}
+              />
+            </div>
+            <CardContent className="artist-card-content">
+              <Typography
+                variant="subtitle2"
+                component="div"
+                className="artist-name"
+                noWrap
+                title={item.name}
+              >
                 {item.name}
               </Typography>
-              <Typography variant="body2" color="text.secondary">
+              <Typography variant="caption" className="artist-label">
                 Artist
               </Typography>
             </CardContent>
@@ -91,17 +89,18 @@ export default function SearchArtistsResults({
       </div>
 
       {continuation && results.length > 0 && hideLoadMore !== true && (
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            m: 3,
-          }}
-        >
+        <Box sx={{ display: "flex", justifyContent: "center", mt: 4, mb: 2 }}>
           <Button
             variant="contained"
             loading={loading}
             onClick={fetchContinuations}
+            className="play-btn-gradient"
+            sx={{
+              borderRadius: "24px",
+              px: 4,
+              textTransform: "none",
+              fontWeight: 600,
+            }}
           >
             Load more
           </Button>
@@ -109,12 +108,18 @@ export default function SearchArtistsResults({
       )}
 
       {!initLoading && results.length > 0 && showRouterLink && (
-        <Box sx={{ display: "flex", justifyContent: "center" }}>
+        <Box sx={{ display: "flex", justifyContent: "center", mt: 3, mb: 2 }}>
           <Button
             variant="outlined"
             color="primary"
             component={Link}
             to={`/search/${query}/artists`}
+            sx={{
+              borderRadius: "24px",
+              px: 4,
+              textTransform: "none",
+              fontWeight: 600,
+            }}
           >
             View All Artists
           </Button>

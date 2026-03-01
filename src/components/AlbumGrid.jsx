@@ -33,7 +33,7 @@ export default function AlbumGrid({
           sx={{
             textDecoration: "none",
             bgcolor: "background.paper",
-            borderRadius: 3,
+            borderRadius: 1,
             overflow: "hidden",
             transition: "transform 200ms ease, box-shadow 200ms ease",
             "&:hover": {

@@ -5,8 +5,8 @@ export default function SearchTabs() {
   const { query } = useParams();
 
   return (
-    <Box sx={{ display: "flex", gap: 2, marginBlock: 1 }}>
-      <Tabs value={"/search/:query"} aria-label="lab API tabs example">
+    <Box sx={{ display: "flex", gap: 2 }}>
+      <Tabs value={"/search/:query"} aria-label="search tabs">
         <Tab
           label="All"
           value="/search/:query"

@@ -40,6 +40,7 @@ export default function TrackList({
       <Box className="track-list-header" sx={{
         ...trackRowStyle,
         color: "text.secondary",
+        cursor: "default",
       }}>
         <Box className="track-index">#</Box>
         <Box className="track-title">Title</Box>
