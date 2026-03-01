@@ -8,11 +8,11 @@ export default function AlbumGrid({
   hideArtist = false,
 }) {
   const albumGridStyle = {
-    marginTop: 20,
+    marginTop: 16,
     display: "grid",
-    padding: 10,
+    padding: 8,
     gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))",
-    gap: 18,
+    gap: 16,
   };
 
   if (onlyOneRow) {
@@ -30,17 +30,27 @@ export default function AlbumGrid({
           component={Link}
           to={`/album/${item.albumId}`}
           className="album-item"
+          sx={{
+            textDecoration: "none",
+            bgcolor: "background.paper",
+            borderRadius: 3,
+            overflow: "hidden",
+            transition: "transform 200ms ease, box-shadow 200ms ease",
+            "&:hover": {
+              transform: "translateY(-4px) scale(1.02)",
+              boxShadow: "0 8px 30px rgba(124, 58, 237, 0.12)",
+            },
+          }}
         >
           <CardMedia
             sx={{ height: 200, width: "100%" }}
-            image={ `${PROXY_URL}${item.thumbnailUrl}`}
+            image={`${PROXY_URL}${item.thumbnailUrl}`}
           />
-          <CardContent>
-            <Typography variant="body1" component="div">
+          <CardContent sx={{ pb: "12px !important", pt: 1.5 }}>
+            <Typography variant="body2" sx={{ fontWeight: 600 }} noWrap>
               {item.title}
             </Typography>
-
-            <Typography variant="body2" color="text.secondary">
+            <Typography variant="caption" color="text.secondary" noWrap>
               {item.type}
               {!hideArtist && ` • ${item.artist.name}`}
             </Typography>

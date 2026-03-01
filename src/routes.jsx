@@ -1,4 +1,8 @@
 import App from "./App";
+import HomePage from "./pages/HomePage";
+import ExplorePage from "./pages/ExplorePage";
+import ChartsPage from "./pages/ChartsPage";
+import LibraryPage from "./pages/LibraryPage";
 import SearchPage from "./pages/SearchPage";
 import AlbumPage from "./pages/AlbumPage";
 import ArtistPage from "./pages/ArtistPage";
@@ -7,7 +11,6 @@ import SearchAllPage from "./pages/SearchAllPage";
 import SearchArtistsPage from "./pages/SearchArtistsPage";
 import SearchTracksPage from "./pages/SearchTracksPage";
 import SearchAlbumsPage from "./pages/SearchAlbumsPage";
-import { Navigate } from "react-router-dom";
 import { Box, Typography } from "@mui/material";
 
 export default [
@@ -17,7 +20,23 @@ export default [
     children: [
       {
         index: true,
-        element: <Navigate to="/search" replace />,
+        element: <HomePage />,
+      },
+      {
+        path: "explore",
+        element: <ExplorePage />,
+      },
+      {
+        path: "charts",
+        element: <ChartsPage />,
+      },
+      {
+        path: "library",
+        element: <LibraryPage />,
+      },
+      {
+        path: "library/likes",
+        element: <LibraryPage />,
       },
       {
         path: "search/:query",
@@ -55,8 +74,8 @@ export default [
         path: "*",
         element: (
           <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '60vh', textAlign: 'center' }}>
-            <Typography variant="h2" fontWeight="bold">404</Typography>
-            <Typography variant="h5" color="text.secondary">Página no encontrada</Typography>
+            <Typography variant="h2" fontWeight="bold" className="gradient-text">404</Typography>
+            <Typography variant="h5" color="text.secondary">Page not found</Typography>
           </Box>
         ),
       },

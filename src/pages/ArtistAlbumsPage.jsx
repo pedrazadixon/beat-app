@@ -17,7 +17,6 @@ export default function ArtistAlbumsPage() {
   const observerTarget = useRef(null);
 
   const fetchArtistAlbums = async () => {
-    console.log(`artistId: ${artistId}`);
     setLoading(true);
     const [responseInfo, responseAlbums] = await Promise.all([
       getArtist(artistId),
