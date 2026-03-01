@@ -42,8 +42,7 @@ export default function AlbumPage() {
               sx={{
                 display: "flex",
                 gap: 3,
-                p: 3,
-                pb: 2,
+                p: 2,
                 background: (theme) =>
                   theme.palette.mode === "dark"
                     ? "linear-gradient(180deg, rgba(124,58,237,0.12) 0%, transparent 100%)"
@@ -98,7 +97,7 @@ export default function AlbumPage() {
             </Box>
           )}
 
-          <Box sx={{ px: 2 }}>
+          <Box>
             {loading && (
               <Box sx={{ display: "flex", justifyContent: "center", m: 5 }}>
                 <CircularProgress sx={{ color: "primary.main" }} />

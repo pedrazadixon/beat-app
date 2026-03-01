@@ -108,7 +108,7 @@ export default function ArtistPage() {
             </Box>
           )}
 
-          <Box sx={{ p: 3 }}>
+          <Box sx={{ paddingBlock: 3 }}>
             {tracks.length > 0 && (
               <Box sx={{ mb: 3 }}>
                 <Typography variant="h6" sx={{ fontWeight: 700, mb: 1.5 }}>
