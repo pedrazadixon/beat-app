@@ -58,7 +58,7 @@ export default function Player() {
           sx={{
             width: 56,
             height: 56,
-            borderRadius: 1.5,
+            borderRadius: 0.5,
             overflow: "hidden",
             flexShrink: 0,
             bgcolor: "rgba(148,163,184,0.1)",
