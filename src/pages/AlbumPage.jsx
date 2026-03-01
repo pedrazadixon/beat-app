@@ -56,7 +56,7 @@ export default function AlbumPage() {
                   borderRadius: 2,
                   overflow: "hidden",
                   flexShrink: 0,
-                  boxShadow: "0 8px 40px rgba(0,0,0,0.3)",
+                  boxShadow: "0 8px 10px rgba(0,0,0,0.2)",
                 }}
               >
                 <img

@@ -83,14 +83,14 @@ export default function ArtistPage() {
                 }}
               >
                 <Box sx={{ flexGrow: 1 }}>
-                  <Typography variant="caption" sx={{ color: "rgba(255,255,255,0.7)", textTransform: "uppercase", letterSpacing: 1 }}>
+                  <Typography variant="caption" sx={{ textTransform: "uppercase", letterSpacing: 1, color: "text.secondary" }}>
                     Artist
                   </Typography>
-                  <Typography variant="h3" sx={{ fontWeight: 800, color: "#fff", lineHeight: 1.1 }}>
+                  <Typography variant="h3" sx={{ fontWeight: 800, lineHeight: 1.1, color: "text.primary" }}>
                     {artist.name}
                   </Typography>
                   {artist.subscribers && (
-                    <Typography variant="body2" sx={{ color: "rgba(255,255,255,0.6)", mt: 0.5 }}>
+                    <Typography variant="body2" sx={{ mt: 0.5, color: "text.secondary" }}>
                       {artist.subscribers}
                     </Typography>
                   )}
