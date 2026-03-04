@@ -1,12 +1,33 @@
 import { useEffect, useState } from "react";
-import { Box, Card, CardMedia, CardContent, Typography, CircularProgress, Avatar } from "@mui/material";
-import { Link, useNavigate } from "react-router-dom";
+import {
+  Box,
+  Card,
+  CardMedia,
+  CardContent,
+  Typography,
+  CircularProgress,
+} from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import { getHome } from "../services/home-api";
 import { PROXY_URL } from "../constants";
 import { playerActions } from "../stores/playerStore";
 import HorizontalScroll from "../components/HorizontalScroll";
 import PageLayout from "../layouts/PageLayout";
 import PageContent from "../layouts/PageContent";
+
+const sectionCardSx = {
+  bgcolor: "background.paper",
+  textDecoration: "none",
+  flexShrink: 0,
+  cursor: "pointer",
+  minWidth: { xs: 150, sm: 180 },
+  maxWidth: { xs: 150, sm: 180 },
+  transition: "transform 200ms ease, box-shadow 200ms ease",
+  "&:hover": {
+    transform: "scale(1.02)",
+    boxShadow: "0 8px 30px rgba(124, 58, 237, 0.12)",
+  },
+};
 
 function SectionCard({ item, allSongsInSection }) {
   const navigate = useNavigate();
@@ -16,7 +37,6 @@ function SectionCard({ item, allSongsInSection }) {
 
     switch (item.type) {
       case "song": {
-        // Map home API fields to playerStore format and play directly
         const track = {
           trackId: item.id,
           title: item.title,
@@ -25,7 +45,6 @@ function SectionCard({ item, allSongsInSection }) {
           album: item.album || null,
           duration: item.duration || { label: "", totalSeconds: 0 },
         };
-        // Build a queue from all songs in the same section
         const queue = (allSongsInSection || []).map((s) => ({
           trackId: s.id,
           title: s.title,
@@ -38,7 +57,6 @@ function SectionCard({ item, allSongsInSection }) {
         break;
       }
       case "playlist":
-        // Playlists open in album/playlist view using browseId
         if (item.browseId) navigate(`/album/${item.browseId}`);
         break;
       case "artist":
@@ -48,9 +66,11 @@ function SectionCard({ item, allSongsInSection }) {
         if (item.browseId) navigate(`/album/${item.browseId}`);
         break;
       default:
-        // Fallback: use browseId heuristics
         if (item.browseId) {
-          if (item.browseId.startsWith("MPRE") || item.browseId.startsWith("VL")) {
+          if (
+            item.browseId.startsWith("MPRE") ||
+            item.browseId.startsWith("VL")
+          ) {
             navigate(`/album/${item.browseId}`);
           } else {
             navigate(`/artist/${item.browseId}`);
@@ -60,7 +80,6 @@ function SectionCard({ item, allSongsInSection }) {
     }
   };
 
-  // Subtitle: for songs show artist names, for playlists show author
   const subtitle =
     item.subtitle ||
     (item.type === "song" && item.artists
@@ -70,20 +89,11 @@ function SectionCard({ item, allSongsInSection }) {
         : null);
 
   return (
-    <Card
-      onClick={handleClick}
-      className="section-card"
-      sx={{
-        bgcolor: "background.paper",
-        textDecoration: "none",
-        flexShrink: 0,
-        cursor: "pointer",
-      }}
-    >
+    <Card onClick={handleClick} sx={sectionCardSx}>
       <CardMedia
         sx={{
-          height: 180,
-          width: 180,
+          height: { xs: 150, sm: 180 },
+          width: { xs: 150, sm: 180 },
           borderRadius: item.type === "artist" ? "50%" : undefined,
           mx: item.type === "artist" ? "auto" : undefined,
           mt: item.type === "artist" ? 1.5 : 0,
@@ -136,13 +146,15 @@ export default function HomePage() {
       }
     }
     fetchData();
-    return () => { mounted = false; };
+    return () => {
+      mounted = false;
+    };
   }, []);
 
   return (
     <PageLayout>
       <PageContent>
-        <Box className="page-enter" sx={{ p: 3 }}>
+        <Box className="page-enter" sx={{ p: { xs: 2, sm: 3 } }}>
           <Typography variant="h4" sx={{ fontWeight: 700, mb: 3 }}>
             Good {getGreeting()} 👋
           </Typography>
@@ -162,7 +174,9 @@ export default function HomePage() {
           )}
 
           {sections.map((section, idx) => {
-            const songsInSection = (section.items || []).filter((i) => i.type === "song");
+            const songsInSection = (section.items || []).filter(
+              (i) => i.type === "song"
+            );
             return (
               <HorizontalScroll key={idx} title={section.title}>
                 {(section.items || []).map((item, i) => (

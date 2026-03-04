@@ -1,8 +1,66 @@
-import { Card, CardMedia, Typography, CardContent, Box, CircularProgress, Button } from "@mui/material";
-import { searchArtists, searchArtistsContinuations } from "../services/youtube-api";
+import {
+  Card,
+  CardMedia,
+  Typography,
+  CardContent,
+  Box,
+  CircularProgress,
+  Button,
+} from "@mui/material";
+import {
+  searchArtists,
+  searchArtistsContinuations,
+} from "../services/youtube-api";
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { PROXY_URL } from "../constants";
+
+const artistGridSx = (onlyOneRow) => ({
+  mt: 2,
+  display: "grid",
+  p: 1,
+  gridTemplateColumns: {
+    xs: "repeat(auto-fill, minmax(140px, 1fr))",
+    sm: "repeat(auto-fill, minmax(180px, 1fr))",
+  },
+  gap: { xs: "14px", sm: "0px 16px" },
+  gridTemplateRows: "auto",
+  ...(onlyOneRow && {
+    gridAutoRows: 0,
+    overflow: "hidden",
+  }),
+});
+
+const artistItemSx = {
+  textDecoration: "none",
+  mb: 2,
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  width: "100%",
+  cursor: "pointer",
+  borderRadius: 4,
+  bgcolor: (t) =>
+    t.palette.mode === "dark"
+      ? "rgba(26, 26, 46, 0.6)"
+      : "rgba(255, 255, 255, 0.7)",
+  border: "1px solid",
+  borderColor: (t) =>
+    t.palette.mode === "dark"
+      ? "rgba(148, 163, 184, 0.08)"
+      : "rgba(0, 0, 0, 0.06)",
+  backdropFilter: "blur(20px)",
+  p: { xs: "14px 8px 10px", sm: "20px 12px 14px" },
+  transition: "transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease",
+  "&:hover": {
+    transform: "scale(1.02)",
+    boxShadow: "0 4px 12px rgba(124, 58, 237, 0.18)",
+    borderColor: "rgba(124, 58, 237, 0.3)",
+  },
+  "&:hover .artist-avatar-ring": {
+    boxShadow: "0 0 20px rgba(124, 58, 237, 0.35)",
+  },
+};
 
 export default function SearchArtistsResults({
   hideLoadMore = false,
@@ -38,7 +96,7 @@ export default function SearchArtistsResults({
   }, [query]);
 
   return (
-    <div className="artist-results-wrapper">
+    <Box>
       {initLoading && (
         <Box sx={{ display: "flex", justifyContent: "center", m: 5 }}>
           <CircularProgress />
@@ -47,46 +105,77 @@ export default function SearchArtistsResults({
 
       {!initLoading && results.length === 0 && (
         <Box sx={{ display: "flex", justifyContent: "center", m: 5 }}>
-          <Typography variant="body1" sx={{ opacity: 0.6 }}>
+          <Typography variant="body1" color="text.secondary">
             No results found
           </Typography>
         </Box>
       )}
 
-      <div className={`artist-grid ${onlyOneRow ? "artist-grid--single-row" : ""}`}>
+      <Box sx={artistGridSx(onlyOneRow)}>
         {results.map((item, index) => (
           <Card
             key={index + item.artistId}
             component={Link}
             to={`/artist/${item.artistId}`}
-            className="artist-item"
             elevation={0}
+            sx={artistItemSx}
           >
-            <div className="artist-avatar-wrapper">
+            {/* Avatar wrapper – gradient ring */}
+            <Box
+              className="artist-avatar-ring"
+              sx={{
+                position: "relative",
+                width: { xs: 100, sm: 130 },
+                height: { xs: 100, sm: 130 },
+                borderRadius: "50%",
+                background: "linear-gradient(135deg, #7c3aed, #06b6d4)",
+                flexShrink: 0,
+                transition: "box-shadow 200ms ease",
+              }}
+            >
               <CardMedia
                 component="img"
-                className="artist-avatar"
                 image={`${PROXY_URL}${item.thumbnailUrl}`}
                 alt={item.name}
+                sx={{
+                  width: "100%",
+                  height: "100%",
+                  borderRadius: "50%",
+                  objectFit: "cover",
+                }}
               />
-            </div>
-            <CardContent className="artist-card-content">
+            </Box>
+            <CardContent
+              sx={{
+                textAlign: "center",
+                p: "12px 4px 8px !important",
+                width: "100%",
+              }}
+            >
               <Typography
                 variant="subtitle2"
                 component="div"
-                className="artist-name"
                 noWrap
                 title={item.name}
+                sx={{ fontWeight: 600, fontSize: "0.875rem", lineHeight: 1.3 }}
               >
                 {item.name}
               </Typography>
-              <Typography variant="caption" className="artist-label">
+              <Typography
+                variant="caption"
+                sx={{
+                  opacity: 0.55,
+                  fontSize: "0.75rem",
+                  textTransform: "uppercase",
+                  letterSpacing: 0.5,
+                }}
+              >
                 Artist
               </Typography>
             </CardContent>
           </Card>
         ))}
-      </div>
+      </Box>
 
       {continuation && results.length > 0 && hideLoadMore !== true && (
         <Box sx={{ display: "flex", justifyContent: "center", mt: 4, mb: 2 }}>
@@ -94,12 +183,13 @@ export default function SearchArtistsResults({
             variant="contained"
             loading={loading}
             onClick={fetchContinuations}
-            className="play-btn-gradient"
             sx={{
+              background: "linear-gradient(135deg, #7c3aed, #06b6d4)",
               borderRadius: "24px",
               px: 4,
-              textTransform: "none",
-              fontWeight: 600,
+              "&:hover": {
+                background: "linear-gradient(135deg, #6d28d9, #0891b2)",
+              },
             }}
           >
             Load more
@@ -114,17 +204,12 @@ export default function SearchArtistsResults({
             color="primary"
             component={Link}
             to={`/search/${query}/artists`}
-            sx={{
-              borderRadius: "24px",
-              px: 4,
-              textTransform: "none",
-              fontWeight: 600,
-            }}
+            sx={{ borderRadius: "24px", px: 4 }}
           >
             View All Artists
           </Button>
         </Box>
       )}
-    </div>
+    </Box>
   );
 }

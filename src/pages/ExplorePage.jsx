@@ -14,6 +14,16 @@ import { PROXY_URL } from "../constants";
 import PageLayout from "../layouts/PageLayout";
 import PageContent from "../layouts/PageContent";
 
+const albumCardSx = {
+  textDecoration: "none",
+  bgcolor: "background.paper",
+  transition: "transform 200ms ease, box-shadow 200ms ease",
+  "&:hover": {
+    transform: "translateY(-4px) scale(1.02)",
+    boxShadow: "0 8px 30px rgba(124, 58, 237, 0.12)",
+  },
+};
+
 export default function ExplorePage() {
   const [explore, setExplore] = useState(null);
   const [newReleases, setNewReleases] = useState([]);
@@ -34,13 +44,15 @@ export default function ExplorePage() {
       }
     }
     fetchData();
-    return () => { mounted = false; };
+    return () => {
+      mounted = false;
+    };
   }, []);
 
   return (
     <PageLayout>
       <PageContent>
-        <Box className="page-enter" sx={{ p: 3 }}>
+        <Box className="page-enter" sx={{ p: { xs: 2, sm: 3 } }}>
           <Typography variant="h4" sx={{ fontWeight: 700, mb: 3 }}>
             Explore
           </Typography>
@@ -51,13 +63,16 @@ export default function ExplorePage() {
             </Box>
           )}
 
-          {/* Mood & Genre Chips from explore */}
+          {/* Mood & Genre Chips */}
           {explore?.sections && (
             <Box sx={{ mb: 4 }}>
               {explore.sections.map((section, idx) => (
                 <Box key={idx} sx={{ mb: 3 }}>
                   {section.title && (
-                    <Typography variant="h6" sx={{ fontWeight: 600, mb: 1.5 }}>
+                    <Typography
+                      variant="h6"
+                      sx={{ fontWeight: 600, mb: 1.5 }}
+                    >
                       {section.title}
                     </Typography>
                   )}
@@ -67,11 +82,14 @@ export default function ExplorePage() {
                         key={i}
                         label={item.title}
                         component={Link}
-                        to={item.browseId ? `/search/${encodeURIComponent(item.title)}` : "#"}
+                        to={
+                          item.browseId
+                            ? `/search/${encodeURIComponent(item.title)}`
+                            : "#"
+                        }
                         clickable
                         sx={{
                           fontSize: "0.85rem",
-                          fontWeight: 500,
                           py: 2.5,
                           px: 1,
                           bgcolor: item.color || "background.paper",
@@ -95,10 +113,12 @@ export default function ExplorePage() {
                 New Releases
               </Typography>
               <Box
-                className="album-grid"
                 sx={{
                   display: "grid",
-                  gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))",
+                  gridTemplateColumns: {
+                    xs: "repeat(auto-fill, minmax(140px, 1fr))",
+                    sm: "repeat(auto-fill, minmax(180px, 1fr))",
+                  },
                   gap: 2,
                 }}
               >
@@ -107,18 +127,29 @@ export default function ExplorePage() {
                     key={idx}
                     component={Link}
                     to={`/album/${album.browseId || album.id}`}
-                    className="album-item"
-                    sx={{ textDecoration: "none", bgcolor: "background.paper" }}
+                    sx={albumCardSx}
                   >
                     <CardMedia
-                      sx={{ height: 180, width: "100%" }}
-                      image={album.thumbnail ? `${PROXY_URL}${album.thumbnail}` : ""}
+                      sx={{ height: { xs: 140, sm: 180 }, width: "100%" }}
+                      image={
+                        album.thumbnail
+                          ? `${PROXY_URL}${album.thumbnail}`
+                          : ""
+                      }
                     />
                     <CardContent sx={{ pb: "12px !important" }}>
-                      <Typography variant="body2" sx={{ fontWeight: 600 }} noWrap>
+                      <Typography
+                        variant="body2"
+                        sx={{ fontWeight: 600 }}
+                        noWrap
+                      >
                         {album.title}
                       </Typography>
-                      <Typography variant="caption" color="text.secondary" noWrap>
+                      <Typography
+                        variant="caption"
+                        color="text.secondary"
+                        noWrap
+                      >
                         {album.artists?.[0]?.name || album.year || ""}
                       </Typography>
                     </CardContent>

@@ -20,6 +20,32 @@ const secondsToTime = (seconds) => {
   return `${minutes}:${secs.toString().padStart(2, "0")}`;
 };
 
+const playBtnSx = {
+  background: "linear-gradient(135deg, #7c3aed, #06b6d4)",
+  color: "#fff",
+  transition: "transform 200ms ease, box-shadow 200ms ease",
+  "&:hover": {
+    background: "linear-gradient(135deg, #6d28d9, #0891b2)",
+    transform: "scale(1.08)",
+    boxShadow: "0 4px 20px rgba(124, 58, 237, 0.4)",
+  },
+};
+
+const sliderThumbSx = {
+  width: 4,
+  height: 4,
+  transition: "0.3s cubic-bezier(.47,1.64,.41,.8)",
+  "&::before": { boxShadow: "0 2px 12px 0 rgba(0,0,0,0.4)" },
+  "&::after": { height: 38, width: 38 },
+  "&:hover, &.Mui-focusVisible": {
+    width: 12,
+    height: 12,
+    cursor: "pointer",
+    boxShadow: "0px 0px 0px 8px rgba(124, 58, 237, 0.16)",
+  },
+  "&.Mui-active": { width: 16, height: 16 },
+};
+
 export default function Player() {
   const { isPlaying, duration, currentTime, currentTrack, isLoading } =
     useStore(playerStore);
@@ -51,14 +77,34 @@ export default function Player() {
   };
 
   return (
-    <div className="player-bar">
+    <Box
+      sx={{
+        px: { xs: 1, sm: 2 },
+        py: { xs: 2, sm: 1 },
+        display: "flex",
+        gap: { xs: 1, sm: 2 },
+        alignItems: "center",
+        justifyContent: "space-between",
+        minHeight: { xs: 56, sm: 80 },
+        flexWrap: { xs: "wrap", sm: "nowrap" },
+      }}
+    >
       {/* Track info */}
-      <div className="track-info">
+      <Box
+        sx={{
+          display: "flex",
+          gap: { xs: 1, sm: 1.5 },
+          alignItems: "center",
+          minWidth: { xs: 0, sm: 200 },
+          maxWidth: { xs: "none", sm: 300 },
+          flex: { xs: "1 1 auto", sm: "0 0 auto" },
+        }}
+      >
         <Box
           sx={{
-            width: 56,
-            height: 56,
-            borderRadius: 0.5,
+            width: { xs: 40, sm: 56 },
+            height: { xs: 40, sm: 56 },
+            borderRadius: 1,
             overflow: "hidden",
             flexShrink: 0,
             bgcolor: "rgba(148,163,184,0.1)",
@@ -76,8 +122,30 @@ export default function Player() {
         </Box>
 
         <Box sx={{ minWidth: 0 }}>
-          <p>{currentTrack?.title ?? ""}</p>
-          <p>{currentTrack?.artists[0]?.name ?? ""}</p>
+          <Typography
+            variant="body2"
+            sx={{
+              fontWeight: 600,
+              fontSize: "0.9rem",
+              whiteSpace: "nowrap",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+            }}
+          >
+            {currentTrack?.title ?? ""}
+          </Typography>
+          <Typography
+            variant="caption"
+            sx={{
+              opacity: 0.7,
+              whiteSpace: "nowrap",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              display: "block",
+            }}
+          >
+            {currentTrack?.artists[0]?.name ?? ""}
+          </Typography>
         </Box>
 
         <IconButton
@@ -92,40 +160,71 @@ export default function Player() {
             <FavoriteBorderRounded sx={{ color: "text.primary", fontSize: 20 }} />
           )}
         </IconButton>
-      </div>
+      </Box>
 
       {/* Controls */}
-      <div className="buttons-and-progress">
-        <div style={{ display: "flex", gap: "5px", alignItems: "center" }}>
-          <IconButton aria-label="previous song" onClick={playerActions.playPrevious}>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: 0,
+          flexGrow: 1,
+          maxWidth: { xs: "none", sm: 700 },
+          order: { xs: -1, sm: 0 },
+          width: { xs: "100%", sm: "auto" },
+        }}
+      >
+        <Box sx={{ display: "flex", gap: "5px", alignItems: "center" }}>
+          <IconButton
+            aria-label="previous song"
+            onClick={playerActions.playPrevious}
+            size="small"
+          >
             <SkipPreviousRounded sx={{ color: "text.primary" }} />
           </IconButton>
           <IconButton
-            className="play-btn-gradient"
             aria-label={isPlaying ? "pause" : "play"}
             onClick={playerActions.togglePause}
             sx={{
-              width: 42,
-              height: 42,
+              width: { xs: 36, sm: 42 },
+              height: { xs: 36, sm: 42 },
+              ...playBtnSx,
             }}
           >
             {isLoading ? (
               <CircularProgress
-                size={24}
+                size={20}
                 sx={{ color: "#fff", padding: "2px" }}
               />
             ) : isPlaying ? (
-              <PauseRounded sx={{ fontSize: "1.8rem", color: "#fff" }} />
+              <PauseRounded sx={{ fontSize: { xs: "1.4rem", sm: "1.8rem" }, color: "#fff" }} />
             ) : (
-              <PlayArrowRounded sx={{ fontSize: "1.8rem", color: "#fff" }} />
+              <PlayArrowRounded sx={{ fontSize: { xs: "1.4rem", sm: "1.8rem" }, color: "#fff" }} />
             )}
           </IconButton>
-          <IconButton aria-label="next song" onClick={playerActions.playNext}>
+          <IconButton
+            aria-label="next song"
+            onClick={playerActions.playNext}
+            size="small"
+          >
             <SkipNextRounded sx={{ color: "text.primary" }} />
           </IconButton>
-        </div>
-        <div className="progress-and-time">
-          <Typography variant="caption" sx={{ color: "text.secondary", minWidth: 32 }}>
+        </Box>
+        {/* Progress bar — hidden on mobile for compact layout */}
+        <Box
+          sx={{
+            display: { xs: "none", sm: "flex" },
+            gap: 1,
+            alignItems: "center",
+            justifyContent: "space-between",
+            width: "100%",
+          }}
+        >
+          <Typography
+            variant="caption"
+            sx={{ color: "text.secondary", minWidth: 32 }}
+          >
             {secondsToTime(currentTime)}
           </Typography>
           <Slider
@@ -140,46 +239,34 @@ export default function Player() {
               color: "primary.main",
               height: 4,
               cursor: "default",
-              "& .MuiSlider-thumb": {
-                width: 4,
-                height: 4,
-                transition: "0.3s cubic-bezier(.47,1.64,.41,.8)",
-                "&::before": {
-                  boxShadow: "0 2px 12px 0 rgba(0,0,0,0.4)",
-                },
-                "&::after": {
-                  height: 38,
-                  width: 38,
-                },
-                "&:hover, &.Mui-focusVisible": {
-                  width: 12,
-                  height: 12,
-                  cursor: "pointer",
-                  boxShadow: `0px 0px 0px 8px rgba(124, 58, 237, 0.16)`,
-                },
-                "&.Mui-active": {
-                  width: 16,
-                  height: 16,
-                },
-              },
-              "& .MuiSlider-rail": {
-                opacity: 0.2,
-              },
-              "& .MuiSlider-track": {
-                background: "linear-gradient(90deg, #7c3aed, #06b6d4)",
-                border: "none",
-              },
+              "& .MuiSlider-thumb": sliderThumbSx,
+              "& .MuiSlider-rail": { opacity: 0.2 },
             }}
           />
-          <Typography variant="caption" sx={{ color: "text.secondary", minWidth: 32, textAlign: "right" }}>
+          <Typography
+            variant="caption"
+            sx={{ color: "text.secondary", minWidth: 32, textAlign: "right" }}
+          >
             {secondsToTime(duration)}
           </Typography>
-        </div>
-      </div>
+        </Box>
+      </Box>
 
-      {/* Volume & extras */}
-      <div className="volume-and-others" style={{ display: "flex", alignItems: "center" }}>
-        <IconButton aria-label="mute" onClick={() => setMuted(!muted)} size="small">
+      {/* Volume & extras — desktop only */}
+      <Box
+        sx={{
+          display: "flex",
+          gap: 0.5,
+          alignItems: "center",
+          minWidth: { xs: "auto", md: 180 },
+          justifyContent: "flex-end",
+        }}
+      >
+        <IconButton
+          aria-label="mute"
+          onClick={() => setMuted(!muted)}
+          size="small"
+        >
           {muted || volume === 0 ? (
             <VolumeOffRounded sx={{ color: "text.primary", fontSize: 20 }} />
           ) : (
@@ -200,16 +287,13 @@ export default function Player() {
             width: 100,
             ml: 1,
             mr: 1,
-            "& .MuiSlider-track": {
-              background: "linear-gradient(90deg, #7c3aed, #06b6d4)",
-              border: "none",
-            },
+            display: { xs: "none", md: "block" },
           }}
         />
         <IconButton onClick={() => playerActions.toggleQueue()} size="small">
           <QueueMusicRounded sx={{ color: "text.primary", fontSize: 20 }} />
         </IconButton>
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 }

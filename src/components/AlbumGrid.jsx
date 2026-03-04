@@ -1,4 +1,4 @@
-import { Card, CardMedia, CardContent, Typography } from "@mui/material";
+import { Card, CardMedia, CardContent, Typography, Box } from "@mui/material";
 import { Link } from "react-router-dom";
 import { PROXY_URL } from "../constants";
 
@@ -7,33 +7,34 @@ export default function AlbumGrid({
   onlyOneRow = false,
   hideArtist = false,
 }) {
-  const albumGridStyle = {
-    marginTop: 16,
-    display: "grid",
-    padding: 8,
-    gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))",
-    gap: 16,
-  };
-
-  if (onlyOneRow) {
-    albumGridStyle.gridTemplateRows = "auto";
-    albumGridStyle.gridAutoRows = 0;
-    albumGridStyle.rowGap = 0;
-    albumGridStyle.overflow = "hidden";
-  }
-
   return (
-    <div style={albumGridStyle} className="album-grid">
+    <Box
+      sx={{
+        mt: 2,
+        display: "grid",
+        p: 1,
+        gridTemplateColumns: {
+          xs: "repeat(auto-fill, minmax(140px, 1fr))",
+          sm: "repeat(auto-fill, minmax(180px, 1fr))",
+        },
+        gap: 2,
+        ...(onlyOneRow && {
+          gridTemplateRows: "auto",
+          gridAutoRows: 0,
+          rowGap: 0,
+          overflow: "hidden",
+        }),
+      }}
+    >
       {albums.map((item, index) => (
         <Card
           key={index + item.albumId}
           component={Link}
           to={`/album/${item.albumId}`}
-          className="album-item"
           sx={{
             textDecoration: "none",
             bgcolor: "background.paper",
-            borderRadius: 1,
+            borderRadius: 2,
             overflow: "hidden",
             transition: "transform 200ms ease, box-shadow 200ms ease",
             "&:hover": {
@@ -43,7 +44,7 @@ export default function AlbumGrid({
           }}
         >
           <CardMedia
-            sx={{ height: 200, width: "100%" }}
+            sx={{ height: { xs: 140, sm: 200 }, width: "100%" }}
             image={`${PROXY_URL}${item.thumbnailUrl}`}
           />
           <CardContent sx={{ pb: "12px !important", pt: 1.5 }}>
@@ -57,6 +58,6 @@ export default function AlbumGrid({
           </CardContent>
         </Card>
       ))}
-    </div>
+    </Box>
   );
 }

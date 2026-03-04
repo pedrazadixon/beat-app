@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
   Box,
@@ -25,9 +24,23 @@ const navItems = [
 ];
 
 const libraryItems = [
-  { label: "Liked Songs", icon: <FavoriteRoundedIcon />, path: "/library/likes" },
-  // { label: "Library", icon: <MusicNoteRoundedIcon />, path: "/library" },
+  {
+    label: "Liked Songs",
+    icon: <FavoriteRoundedIcon />,
+    path: "/library/likes",
+  },
 ];
+
+const activeIndicatorSx = {
+  content: '""',
+  position: "absolute",
+  left: 0,
+  top: "25%",
+  bottom: "25%",
+  width: 3,
+  borderRadius: "0 3px 3px 0",
+  background: "linear-gradient(135deg, #7c3aed, #06b6d4)",
+};
 
 export default function Sidebar({ mobileOpen, onMobileToggle }) {
   const location = useLocation();
@@ -43,24 +56,66 @@ export default function Sidebar({ mobileOpen, onMobileToggle }) {
     if (onMobileToggle) onMobileToggle();
   };
 
+  const renderNavItem = (item) => (
+    <ListItemButton
+      key={item.path}
+      selected={isActive(item.path)}
+      onClick={() => handleNav(item.path)}
+      sx={{
+        position: "relative",
+        py: 1,
+        mb: 0.3,
+        "&.Mui-selected::before": activeIndicatorSx,
+      }}
+    >
+      <ListItemIcon
+        sx={{
+          minWidth: 40,
+          color: isActive(item.path) ? "primary.light" : "text.secondary",
+        }}
+      >
+        {item.icon}
+      </ListItemIcon>
+      <ListItemText
+        primary={item.label}
+        primaryTypographyProps={{
+          fontWeight: isActive(item.path) ? 600 : 400,
+          fontSize: "0.9rem",
+        }}
+      />
+    </ListItemButton>
+  );
+
   const drawerContent = (
     <>
       {/* Logo */}
-      <Box sx={{ p: 2.5, pb: 1.5, display: "flex", alignItems: "center", gap: 1.5 }}>
+      <Box
+        sx={{
+          p: 2.5,
+          pb: 1.5,
+          display: "flex",
+          alignItems: "center",
+          gap: 1.5,
+        }}
+      >
         <Box
           sx={{
-            width: 36, height: 36, borderRadius: "10px",
+            width: 36,
+            height: 36,
+            borderRadius: "10px",
             background: "linear-gradient(135deg, #7c3aed, #06b6d4)",
-            display: "flex", alignItems: "center", justifyContent: "center",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
           }}
         >
           <MusicNoteRoundedIcon sx={{ color: "#fff", fontSize: 20 }} />
         </Box>
         <Typography
-          className="sidebar-logo gradient-text"
+          className="gradient-text"
           variant="h6"
           component="div"
-          sx={{ fontWeight: 800, letterSpacing: -0.5 }}
+          sx={{ fontWeight: 800, letterSpacing: -0.5, fontSize: "1.6rem" }}
         >
           Beat
         </Typography>
@@ -70,38 +125,16 @@ export default function Sidebar({ mobileOpen, onMobileToggle }) {
       <Box sx={{ px: 1, mt: 1 }}>
         <Typography
           variant="overline"
-          sx={{ px: 2, color: "text.secondary", fontSize: "0.65rem", letterSpacing: 1.5 }}
+          sx={{
+            px: 2,
+            color: "text.secondary",
+            fontSize: "0.65rem",
+            letterSpacing: 1.5,
+          }}
         >
           Menu
         </Typography>
-        <List sx={{ py: 0.5 }}>
-          {navItems.map((item) => (
-            <ListItemButton
-              key={item.path}
-              selected={isActive(item.path)}
-              onClick={() => handleNav(item.path)}
-              className={`sidebar-nav-item ${isActive(item.path) ? "active" : ""}`}
-              sx={{ position: "relative", py: 1, mb: 0.3 }}
-            >
-              <ListItemIcon
-                sx={{
-                  minWidth: 40,
-                  color: isActive(item.path) ? "primary.light" : "text.secondary",
-                }}
-              >
-                {item.icon}
-              </ListItemIcon>
-              <ListItemText
-                primary={item.label}
-                primaryTypographyProps={{
-                  fontWeight: isActive(item.path) ? 600 : 400,
-                  fontSize: "0.9rem",
-                  color: isActive(item.path) ? "text.primary" : "text.primary",
-                }}
-              />
-            </ListItemButton>
-          ))}
-        </List>
+        <List sx={{ py: 0.5 }}>{navItems.map(renderNavItem)}</List>
       </Box>
 
       <Divider sx={{ mx: 2, my: 1 }} />
@@ -110,38 +143,16 @@ export default function Sidebar({ mobileOpen, onMobileToggle }) {
       <Box sx={{ px: 1 }}>
         <Typography
           variant="overline"
-          sx={{ px: 2, color: "text.secondary", fontSize: "0.65rem", letterSpacing: 1.5 }}
+          sx={{
+            px: 2,
+            color: "text.secondary",
+            fontSize: "0.65rem",
+            letterSpacing: 1.5,
+          }}
         >
           Library
         </Typography>
-        <List sx={{ py: 0.5 }}>
-          {libraryItems.map((item) => (
-            <ListItemButton
-              key={item.path}
-              selected={isActive(item.path)}
-              onClick={() => handleNav(item.path)}
-              className={`sidebar-nav-item ${isActive(item.path) ? "active" : ""}`}
-              sx={{ position: "relative", py: 1, mb: 0.3 }}
-            >
-              <ListItemIcon
-                sx={{
-                  minWidth: 40,
-                  color: isActive(item.path) ? "primary.light" : "text.secondary",
-                }}
-              >
-                {item.icon}
-              </ListItemIcon>
-              <ListItemText
-                primary={item.label}
-                primaryTypographyProps={{
-                  fontWeight: isActive(item.path) ? 600 : 400,
-                  fontSize: "0.9rem",
-                  color: isActive(item.path) ? "text.primary" : "text.primary",
-                }}
-              />
-            </ListItemButton>
-          ))}
-        </List>
+        <List sx={{ py: 0.5 }}>{libraryItems.map(renderNavItem)}</List>
       </Box>
     </>
   );
@@ -156,7 +167,10 @@ export default function Sidebar({ mobileOpen, onMobileToggle }) {
   };
 
   return (
-    <Box component="nav" sx={{ width: { sm: SIDEBAR_WIDTH }, flexShrink: { sm: 0 } }}>
+    <Box
+      component="nav"
+      sx={{ width: { sm: SIDEBAR_WIDTH }, flexShrink: { sm: 0 } }}
+    >
       {/* Mobile: temporary drawer */}
       <Drawer
         variant="temporary"

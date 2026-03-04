@@ -10,12 +10,13 @@ import Player from "./components/Player";
 import QueueDrawer from "./components/QueueDrawer";
 import SearchInput from "./components/SearchInput";
 import Sidebar, { SIDEBAR_WIDTH } from "./components/Sidebar";
+import MobileBottomNav from "./components/MobileBottomNav";
 
 function App() {
   const { mode, setMode } = useColorScheme();
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  const isDarkMode = mode === 'dark';
+  const isDarkMode = mode === "dark";
 
   const handleMobileToggle = () => setMobileOpen(!mobileOpen);
 
@@ -47,13 +48,17 @@ function App() {
             gap: { xs: 1, sm: 2 },
             borderBottom: "1px solid",
             borderColor: "divider",
+            bgcolor: "background.paper",
           }}
         >
           {/* Mobile hamburger — only shows on xs */}
           <IconButton
             aria-label="open drawer"
             onClick={handleMobileToggle}
-            sx={{ display: { xs: "inline-flex", sm: "none" }, color: "text.primary" }}
+            sx={{
+              display: { xs: "inline-flex", sm: "none" },
+              color: "text.primary",
+            }}
           >
             <MenuRoundedIcon />
           </IconButton>
@@ -61,7 +66,7 @@ function App() {
           <SearchInput />
 
           <IconButton
-            onClick={() => setMode(isDarkMode ? 'light' : 'dark')}
+            onClick={() => setMode(isDarkMode ? "light" : "dark")}
             sx={{ ml: "auto", color: "text.primary" }}
           >
             {isDarkMode ? <LightModeIcon /> : <DarkModeIcon />}
@@ -87,9 +92,20 @@ function App() {
         </Box>
 
         {/* Player bar */}
-        <Box className="player-container" sx={{ flexShrink: 0 }}>
+        <Box
+          sx={{
+            flexShrink: 0,
+            bgcolor: "background.paper",
+            borderTop: "1px solid",
+            borderColor: "divider",
+            py: { xs: 0.25, sm: 0.5 },
+          }}
+        >
           <Player />
         </Box>
+
+        {/* Mobile Bottom Navigation */}
+        <MobileBottomNav />
       </Box>
     </Box>
   );

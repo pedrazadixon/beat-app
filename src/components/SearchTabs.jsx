@@ -5,7 +5,6 @@ export default function SearchTabs() {
   const { query } = useParams();
   const location = useLocation();
 
-  // Determine the active tab based on the current path
   const getActiveTab = () => {
     const path = location.pathname;
     if (path.endsWith("/tracks")) return "tracks";
@@ -17,12 +16,7 @@ export default function SearchTabs() {
   return (
     <Box sx={{ display: "flex", gap: 2 }}>
       <Tabs value={getActiveTab()} aria-label="search tabs">
-        <Tab
-          label="All"
-          value="all"
-          component={Link}
-          to={`/search/${query}`}
-        />
+        <Tab label="All" value="all" component={Link} to={`/search/${query}`} />
         <Tab
           label="Tracks"
           value="tracks"

@@ -1,7 +1,7 @@
 // prettier-ignore
 import { useEffect, useState } from "react";
 import { getAlbum } from "../services/youtube-api";
-import { useParams, Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { CircularProgress, Box, Typography, IconButton } from "@mui/material";
 import PlayArrowRoundedIcon from "@mui/icons-material/PlayArrowRounded";
 import TrackList from "../components/TrackList";
@@ -9,6 +9,17 @@ import PageContent from "../layouts/PageContent";
 import PageLayout from "../layouts/PageLayout";
 import { playerActions } from "../stores/playerStore";
 import { PROXY_URL } from "../constants";
+
+const playBtnSx = {
+  background: "linear-gradient(135deg, #7c3aed, #06b6d4)",
+  color: "#fff",
+  transition: "transform 200ms ease, box-shadow 200ms ease",
+  "&:hover": {
+    background: "linear-gradient(135deg, #6d28d9, #0891b2)",
+    transform: "scale(1.08)",
+    boxShadow: "0 4px 20px rgba(124, 58, 237, 0.4)",
+  },
+};
 
 export default function AlbumPage() {
   const { albumId } = useParams();
@@ -41,8 +52,10 @@ export default function AlbumPage() {
             <Box
               sx={{
                 display: "flex",
+                flexDirection: { xs: "column", sm: "row" },
                 gap: 3,
-                p: 2,
+                p: { xs: 2, sm: 3 },
+                alignItems: { xs: "center", sm: "flex-start" },
                 background: (theme) =>
                   theme.palette.mode === "dark"
                     ? "linear-gradient(180deg, rgba(124,58,237,0.12) 0%, transparent 100%)"
@@ -51,8 +64,8 @@ export default function AlbumPage() {
             >
               <Box
                 sx={{
-                  width: 220,
-                  height: 220,
+                  width: { xs: 180, sm: 220 },
+                  height: { xs: 180, sm: 220 },
                   borderRadius: 2,
                   overflow: "hidden",
                   flexShrink: 0,
@@ -71,14 +84,27 @@ export default function AlbumPage() {
                 sx={{
                   display: "flex",
                   flexDirection: "column",
-                  justifyContent: "end",
+                  justifyContent: { xs: "center", sm: "end" },
+                  alignItems: { xs: "center", sm: "flex-start" },
                   gap: 1,
+                  textAlign: { xs: "center", sm: "left" },
                 }}
               >
-                <Typography variant="caption" color="text.secondary" sx={{ textTransform: "uppercase", letterSpacing: 1 }}>
+                <Typography
+                  variant="caption"
+                  color="text.secondary"
+                  sx={{ textTransform: "uppercase", letterSpacing: 1 }}
+                >
                   Album
                 </Typography>
-                <Typography variant="h4" sx={{ fontWeight: 700, lineHeight: 1.2 }}>
+                <Typography
+                  variant="h4"
+                  sx={{
+                    fontWeight: 700,
+                    lineHeight: 1.2,
+                    fontSize: { xs: "1.5rem", sm: "2.125rem" },
+                  }}
+                >
                   {album.title}
                 </Typography>
                 <Typography variant="body1" color="text.secondary">
@@ -86,9 +112,8 @@ export default function AlbumPage() {
                 </Typography>
                 <Box sx={{ mt: 1 }}>
                   <IconButton
-                    className="play-btn-gradient"
                     onClick={playAll}
-                    sx={{ width: 48, height: 48 }}
+                    sx={{ width: 48, height: 48, ...playBtnSx }}
                   >
                     <PlayArrowRoundedIcon sx={{ fontSize: 28 }} />
                   </IconButton>

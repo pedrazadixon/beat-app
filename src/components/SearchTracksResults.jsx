@@ -1,5 +1,5 @@
 // prettier-ignore
-import { Box, CircularProgress, Button } from "@mui/material";
+import { Box, CircularProgress, Button, Typography } from "@mui/material";
 // prettier-ignore
 import { searchTracks, searchTracksContinuations } from "../services/youtube-api";
 import { useEffect, useState } from "react";
@@ -45,7 +45,7 @@ export default function SearchTracksResults({
   }, [query]);
 
   return (
-    <div>
+    <Box>
       {initLoading && (
         <Box sx={{ display: "flex", justifyContent: "center", m: 5 }}>
           <CircularProgress />
@@ -54,20 +54,16 @@ export default function SearchTracksResults({
 
       {!initLoading && results.length === 0 && (
         <Box sx={{ display: "flex", justifyContent: "center", m: 5 }}>
-          <div>No results found</div>
+          <Typography variant="body1" color="text.secondary">
+            No results found
+          </Typography>
         </Box>
       )}
 
       {results.length > 0 && <TrackList tracks={results} />}
 
       {continuation && results.length > 0 && hideLoadMore !== true && (
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            m: 3,
-          }}
-        >
+        <Box sx={{ display: "flex", justifyContent: "center", m: 3 }}>
           <Button
             variant="contained"
             loading={loading}
@@ -90,6 +86,6 @@ export default function SearchTracksResults({
           </Button>
         </Box>
       )}
-    </div>
+    </Box>
   );
 }

@@ -1,5 +1,5 @@
 // prettier-ignore
-import { Box, CircularProgress, Button } from "@mui/material";
+import { Box, CircularProgress, Button, Typography } from "@mui/material";
 // prettier-ignore
 import { searchAlbums, searchAlbumsContinuations } from "../services/youtube-api";
 import { useEffect, useState } from "react";
@@ -40,7 +40,7 @@ export default function SearchAlbumsResults({
   }, [query]);
 
   return (
-    <div>
+    <Box>
       {initLoading && (
         <Box sx={{ display: "flex", justifyContent: "center", m: 5 }}>
           <CircularProgress />
@@ -49,20 +49,16 @@ export default function SearchAlbumsResults({
 
       {!initLoading && results.length === 0 && (
         <Box sx={{ display: "flex", justifyContent: "center", m: 5 }}>
-          <div>No results found</div>
+          <Typography variant="body1" color="text.secondary">
+            No results found
+          </Typography>
         </Box>
       )}
 
       <AlbumGrid albums={results} onlyOneRow={onlyOneRow} />
 
       {continuation && results.length > 0 && hideLoadMore !== true && (
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            m: 3,
-          }}
-        >
+        <Box sx={{ display: "flex", justifyContent: "center", m: 3 }}>
           <Button
             variant="contained"
             loading={loading}
@@ -85,6 +81,6 @@ export default function SearchAlbumsResults({
           </Button>
         </Box>
       )}
-    </div>
+    </Box>
   );
 }

@@ -1,10 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  Box,
-  Typography,
-  CircularProgress,
-  IconButton,
-} from "@mui/material";
+import { Box, Typography, CircularProgress, IconButton } from "@mui/material";
 import FavoriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
 import PlayArrowRoundedIcon from "@mui/icons-material/PlayArrowRounded";
 import HistoryRoundedIcon from "@mui/icons-material/HistoryRounded";
@@ -13,6 +8,17 @@ import { playerActions } from "../stores/playerStore";
 import TrackList from "../components/TrackList";
 import PageLayout from "../layouts/PageLayout";
 import PageContent from "../layouts/PageContent";
+
+const playBtnSx = {
+  background: "linear-gradient(135deg, #7c3aed, #06b6d4)",
+  color: "#fff",
+  transition: "transform 200ms ease, box-shadow 200ms ease",
+  "&:hover": {
+    background: "linear-gradient(135deg, #6d28d9, #0891b2)",
+    transform: "scale(1.08)",
+    boxShadow: "0 4px 20px rgba(124, 58, 237, 0.4)",
+  },
+};
 
 export default function LibraryPage() {
   const [likedSongs, setLikedSongs] = useState([]);
@@ -42,7 +48,7 @@ export default function LibraryPage() {
   return (
     <PageLayout>
       <PageContent>
-        <Box className="page-enter" sx={{ p: 3 }}>
+        <Box className="page-enter" sx={{ p: { xs: 2, sm: 3 } }}>
           <Typography variant="h4" sx={{ fontWeight: 700, mb: 3 }}>
             Your Library
           </Typography>
@@ -63,15 +69,16 @@ export default function LibraryPage() {
                     alignItems: "center",
                     gap: 2,
                     mb: 2,
-                    p: 3,
+                    p: { xs: 2, sm: 3 },
                     borderRadius: 3,
-                    background: "linear-gradient(135deg, rgba(124,58,237,0.15), rgba(6,182,212,0.1))",
+                    background:
+                      "linear-gradient(135deg, rgba(124,58,237,0.15), rgba(6,182,212,0.1))",
                   }}
                 >
                   <Box
                     sx={{
-                      width: 64,
-                      height: 64,
+                      width: { xs: 48, sm: 64 },
+                      height: { xs: 48, sm: 64 },
                       borderRadius: 2,
                       background: "linear-gradient(135deg, #7c3aed, #06b6d4)",
                       display: "flex",
@@ -80,34 +87,39 @@ export default function LibraryPage() {
                       flexShrink: 0,
                     }}
                   >
-                    <FavoriteRoundedIcon sx={{ color: "#fff", fontSize: 32 }} />
+                    <FavoriteRoundedIcon
+                      sx={{ color: "#fff", fontSize: { xs: 24, sm: 32 } }}
+                    />
                   </Box>
                   <Box sx={{ flexGrow: 1 }}>
                     <Typography variant="h6" sx={{ fontWeight: 700 }}>
                       Liked Songs
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                      {likedSongs.length} {likedSongs.length === 1 ? "song" : "songs"}
+                      {likedSongs.length}{" "}
+                      {likedSongs.length === 1 ? "song" : "songs"}
                     </Typography>
                   </Box>
                   {likedSongs.length > 0 && (
                     <IconButton
-                      className="play-btn-gradient"
                       onClick={playAllLiked}
-                      sx={{ width: 48, height: 48 }}
+                      sx={{ width: 48, height: 48, ...playBtnSx }}
                     >
                       <PlayArrowRoundedIcon sx={{ fontSize: 28 }} />
                     </IconButton>
                   )}
                 </Box>
 
-                {likedSongs.length > 0 && (
-                  <TrackList tracks={likedSongs} />
-                )}
+                {likedSongs.length > 0 && <TrackList tracks={likedSongs} />}
 
                 {likedSongs.length === 0 && (
-                  <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-                    Songs you like will appear here. Tap the heart icon on the player to save songs.
+                  <Typography
+                    variant="body2"
+                    color="text.secondary"
+                    sx={{ mt: 1 }}
+                  >
+                    Songs you like will appear here. Tap the heart icon on the
+                    player to save songs.
                   </Typography>
                 )}
               </Box>
@@ -115,7 +127,14 @@ export default function LibraryPage() {
               {/* Recently Played */}
               {recentPlays.length > 0 && (
                 <Box sx={{ mb: 4 }}>
-                  <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 2 }}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 1,
+                      mb: 2,
+                    }}
+                  >
                     <HistoryRoundedIcon sx={{ color: "text.secondary" }} />
                     <Typography variant="h6" sx={{ fontWeight: 700 }}>
                       Recently Played

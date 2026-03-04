@@ -2,7 +2,13 @@
 import { getArtist, getPlaylistTracks, getArtistAlbums } from "../services/youtube-api";
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { CircularProgress, Box, Button, Typography, IconButton } from "@mui/material";
+import {
+  CircularProgress,
+  Box,
+  Button,
+  Typography,
+  IconButton,
+} from "@mui/material";
 import PlayArrowRoundedIcon from "@mui/icons-material/PlayArrowRounded";
 import TrackList from "../components/TrackList";
 import PageContent from "../layouts/PageContent";
@@ -10,6 +16,17 @@ import PageLayout from "../layouts/PageLayout";
 import AlbumGrid from "../components/AlbumGrid";
 import { playerActions } from "../stores/playerStore";
 import { PROXY_URL } from "../constants";
+
+const playBtnSx = {
+  background: "linear-gradient(135deg, #7c3aed, #06b6d4)",
+  color: "#fff",
+  transition: "transform 200ms ease, box-shadow 200ms ease",
+  "&:hover": {
+    background: "linear-gradient(135deg, #6d28d9, #0891b2)",
+    transform: "scale(1.08)",
+    boxShadow: "0 4px 20px rgba(124, 58, 237, 0.4)",
+  },
+};
 
 export default function ArtistPage() {
   const { artistId } = useParams();
@@ -28,7 +45,9 @@ export default function ArtistPage() {
     setAlbums(responseAlbums.albums);
 
     if (responseInfo.tracksPlaylistId) {
-      const responseTracks = await getPlaylistTracks(responseInfo.tracksPlaylistId);
+      const responseTracks = await getPlaylistTracks(
+        responseInfo.tracksPlaylistId
+      );
       responseTracks.tracks = responseTracks.tracks.slice(0, 4);
       setTracks(responseTracks.tracks);
     } else {
@@ -54,7 +73,7 @@ export default function ArtistPage() {
             <Box
               sx={{
                 position: "relative",
-                height: 320,
+                height: { xs: 220, sm: 320 },
                 overflow: "hidden",
               }}
             >
@@ -69,46 +88,78 @@ export default function ArtistPage() {
                   transform: "scale(1.05)",
                 }}
               />
-              <Box className="hero-gradient-overlay" />
+              {/* Gradient overlay */}
+              <Box
+                sx={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  background: (t) =>
+                    t.palette.mode === "dark"
+                      ? "linear-gradient(180deg, rgba(10,10,26,0.3) 0%, rgba(10,10,26,0.85) 100%)"
+                      : "linear-gradient(180deg, rgba(248,250,252,0.3) 0%, rgba(248,250,252,0.85) 100%)",
+                }}
+              />
               <Box
                 sx={{
                   position: "absolute",
                   bottom: 0,
                   left: 0,
                   right: 0,
-                  p: 3,
+                  p: { xs: 2, sm: 3 },
                   display: "flex",
                   alignItems: "flex-end",
                   gap: 2,
                 }}
               >
                 <Box sx={{ flexGrow: 1 }}>
-                  <Typography variant="caption" sx={{ textTransform: "uppercase", letterSpacing: 1, color: "text.secondary" }}>
+                  <Typography
+                    variant="caption"
+                    sx={{
+                      textTransform: "uppercase",
+                      letterSpacing: 1,
+                      color: "text.secondary",
+                    }}
+                  >
                     Artist
                   </Typography>
-                  <Typography variant="h3" sx={{ fontWeight: 800, lineHeight: 1.1, color: "text.primary" }}>
+                  <Typography
+                    variant="h3"
+                    sx={{
+                      fontWeight: 800,
+                      lineHeight: 1.1,
+                      color: "text.primary",
+                      fontSize: { xs: "1.8rem", sm: "3rem" },
+                    }}
+                  >
                     {artist.name}
                   </Typography>
                   {artist.subscribers && (
-                    <Typography variant="body2" sx={{ mt: 0.5, color: "text.secondary" }}>
+                    <Typography
+                      variant="body2"
+                      sx={{ mt: 0.5, color: "text.secondary" }}
+                    >
                       {artist.subscribers}
                     </Typography>
                   )}
                 </Box>
                 {tracks.length > 0 && (
                   <IconButton
-                    className="play-btn-gradient"
                     onClick={playAllTracks}
-                    sx={{ width: 56, height: 56 }}
+                    sx={{ width: { xs: 48, sm: 56 }, height: { xs: 48, sm: 56 }, ...playBtnSx }}
                   >
-                    <PlayArrowRoundedIcon sx={{ fontSize: 32 }} />
+                    <PlayArrowRoundedIcon
+                      sx={{ fontSize: { xs: 24, sm: 32 } }}
+                    />
                   </IconButton>
                 )}
               </Box>
             </Box>
           )}
 
-          <Box sx={{ paddingBlock: 3 }}>
+          <Box sx={{ p: { xs: 2, sm: 3 } }}>
             {tracks.length > 0 && (
               <Box sx={{ mb: 3 }}>
                 <Typography variant="h6" sx={{ fontWeight: 700, mb: 1.5 }}>
@@ -130,7 +181,9 @@ export default function ArtistPage() {
                   Albums
                 </Typography>
                 <AlbumGrid albums={albums} onlyOneRow hideArtist />
-                <Box sx={{ display: "flex", justifyContent: "center", m: 2 }}>
+                <Box
+                  sx={{ display: "flex", justifyContent: "center", m: 2 }}
+                >
                   <Button
                     variant="outlined"
                     component={Link}

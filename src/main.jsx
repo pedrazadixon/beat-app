@@ -104,7 +104,70 @@ const theme = createTheme({
           borderRadius: 10,
           margin: "2px 8px",
           "&.Mui-selected": {
-            background: "linear-gradient(135deg, rgba(124,58,237,0.2), rgba(6,182,212,0.2))",
+            background:
+              "linear-gradient(135deg, rgba(124,58,237,0.2), rgba(6,182,212,0.2))",
+          },
+        },
+      },
+    },
+    MuiChip: {
+      styleOverrides: {
+        root: {
+          fontWeight: 500,
+          transition: "all 200ms ease",
+        },
+      },
+    },
+    MuiTab: {
+      styleOverrides: {
+        root: {
+          textTransform: "none",
+          fontWeight: 600,
+          minHeight: 40,
+        },
+      },
+    },
+    MuiTabs: {
+      styleOverrides: {
+        indicator: {
+          background: "linear-gradient(90deg, #7c3aed, #06b6d4)",
+          height: 3,
+          borderRadius: "3px 3px 0 0",
+        },
+      },
+    },
+    MuiBottomNavigation: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "transparent",
+          height: 56,
+        },
+      },
+    },
+    MuiBottomNavigationAction: {
+      styleOverrides: {
+        root: {
+          minWidth: 0,
+          padding: "4px 0",
+          "&.Mui-selected": {
+            color: "#a78bfa",
+          },
+        },
+      },
+    },
+    MuiAvatar: {
+      styleOverrides: {
+        root: {
+          border: "2px solid transparent",
+        },
+      },
+    },
+    MuiSlider: {
+      styleOverrides: {
+        root: {
+          "& .MuiSlider-track": {
+            background: "linear-gradient(90deg, #7c3aed, #06b6d4)",
+            border: "none",
           },
         },
       },

@@ -1,17 +1,25 @@
-import { useParams } from "react-router-dom";
+import { Typography, Box } from "@mui/material";
 import SearchAlbumsResults from "./SearchAlbumsResults";
 import SearchArtistsResults from "./SearchArtistsResults";
 import SearchTracksResults from "./SearchTracksResults";
 
 export default function SearchAllResults() {
   return (
-    <>
-      <h4>Tracks</h4>
+    <Box>
+      <Typography variant="h6" sx={{ fontWeight: 700, mb: 1 }}>
+        Tracks
+      </Typography>
       <SearchTracksResults hideLoadMore showRouterLink limit="4" />
-      <h4>Artists</h4>
+
+      <Typography variant="h6" sx={{ fontWeight: 700, mt: 3, mb: 1 }}>
+        Artists
+      </Typography>
       <SearchArtistsResults hideLoadMore showRouterLink onlyOneRow />
-      <h4>Albums</h4>
+
+      <Typography variant="h6" sx={{ fontWeight: 700, mt: 3, mb: 1 }}>
+        Albums
+      </Typography>
       <SearchAlbumsResults hideLoadMore showRouterLink onlyOneRow />
-    </>
+    </Box>
   );
 }
